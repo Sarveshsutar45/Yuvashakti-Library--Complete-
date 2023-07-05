@@ -1,0 +1,94 @@
+{% extends 'user_base.html' %} {% block title %}Yuvashakti About{% endblock %}
+{% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/gallery.css')}}"
+/>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700;800&family=Josefin+Slab:ital,wght@0,400;0,600;1,300;1,400;1,600&family=Muli:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- <div class="logo">
+  <img
+    src="{{ url_for('static', filename='images/logo.png')}}"
+    alt=""
+    align="left"
+    height="150px "
+    width="150px"
+  />
+
+  <u>
+    <h1>YuvaShkti Library,Nerli.</h1>
+  </u>
+</div> -->
+
+<div class="image">
+  <img src="{{ url_for('static', filename='images/gal-1.jpeg')}}" alt="" />
+  <img src="{{ url_for('static', filename='images/gal-2.jpeg')}}" alt="" />
+  <img src="{{ url_for('static', filename='images/gal-3.jpeg')}}" alt="" />
+  <img src="{{ url_for('static', filename='images/gal-4.jpeg')}}" alt="" />
+</div>
+
+<section class="team">
+  <div class="section-header-about">
+    <h1 class="section-heading">Our Team</h1>
+    <div class="underline" id="team"></div>
+  </div>
+  <div class="cards-wrapper" >
+    <div class="card" data-tilt>
+      <div class="card-img-wrapper">
+        <img
+          src="{{ url_for('static', filename='images/tejas.jpg')}}"
+          alt="Developer"
+        />
+      </div>
+      <div class="card-info">
+        <h2>Tejas Parit</h2>
+        <h3>Student</h3>
+
+        <!-- <button>Read More</button> -->
+      </div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="card-img-wrapper">
+        <img
+          src="{{ url_for('static', filename='images/sarvesh.jpg')}}"
+          alt="CEO"
+        />
+      </div>
+      <div class="card-info">
+        <h2>Sarvesh Sutar</h2>
+        <h3>Student</h3>
+
+        <!-- <button>Read More</button> -->
+      </div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="card-img-wrapper">
+        <img
+          src="{{ url_for('static', filename='images/rutvik.jpg')}}"
+          alt="Designer"
+        />
+      </div>
+      <div class="card-info">
+        <h2>Rutwik Patil</h2>
+        <h3>Student</h3>
+        <!-- <button>Read More</button> -->
+      </div>
+    </div>
+  </div>
+</section>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"
+></script>
+<script src="{{ url_for('static', filename='js/tilt.js')}}"></script>
+
+{% endblock %}

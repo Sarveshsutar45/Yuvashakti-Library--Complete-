@@ -1,0 +1,4 @@
+flask_mysqldb
+flask_mail
+python-dotenv
+flask

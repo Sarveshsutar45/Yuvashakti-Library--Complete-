@@ -1,0 +1,138 @@
+{% extends 'user_base.html' %} {% block title %}Yuvashakti Gallery{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="static/css/about.css" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700;800&family=Josefin+Slab:ital,wght@0,400;0,600;1,300;1,400;1,600&family=Muli:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+  rel="stylesheet"
+/>
+<!-- <h1>YuvaShkti Library,Nerli.</h1> -->
+
+<div class="about">
+  <div class="flex-box">
+    <div class="img">
+      <img src="static/images/mission.png" alt="" />
+    </div>
+    <div class="text">
+      <h4>Our Mission</h4>
+      <p>
+        The mission is to provide college students with the information they
+        need to achieve their highest academic potential and help them acquire
+        research skills necessary for lifelong learning. To support teaching
+        faculty & administrative staff and to participate in interactive
+        information to exchange within the wider library / educational
+        community.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex-box right">
+    <div class="img">
+      <img src="static/images/vision.png" alt="" />
+    </div>
+    <div class="text">
+      <h4>Vision</h4>
+      <p>
+        As the MET BKC’s Institute of Engineering moves towards its goal of
+        achieving prominence as a leading college libraries in this part of the
+        country, 'It is the vision of the Library to support the institution and
+        its stakeholder by providing seamless access to the widest possible
+        spectrum of information resources such as digital, online databases,
+        print and non-print materials relevant to the curricular, informational
+        and innovative research needs of the academic community', means to
+        provide Right Information to the Right Users at the Right Time and in
+        the Right Format.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex-box">
+    <div class="img">
+      <img src="static/images/objectives.png" alt="" />
+    </div>
+    <div class="text">
+      <h4>Strategic Goals and Objectives</h4>
+      <p>
+        The following are the goals and objectives of Central Library E-Library
+        and Audiovisual Services System: To develop and enhance the capability
+        of the library resources and services in meet the demands of the
+        curricular, instructional, and research programs of the academic
+        community by providing regular funding to yearly acquisition of library
+        materials; To establish a computer infrastructure of all library
+        operations and services by acquiring library computer software and
+        hardware to make computerization functional; To establish a strong
+        library linkage with other institutions and agencies in the country and
+        if possible with organizations and agencies from foreign countries by
+        seeking contact with these agencies; To strengthen the library's bond to
+        the library patrons by establishing "Friends of the Library" program
+        which would assist in the development of the library collection; To
+        provide services that enhance the quest for knowledge and intellectual
+        activity; To create various bibliographies and library pathfinders for
+        easy access and retrieval of information. To create an atmosphere
+        wherein students and faculty may carry on the learning process
+        enjoyable.
+      </p>
+    </div>
+  </div>
+</div>
+
+<section class="team">
+  <div class="section-header-about">
+    <h1 class="section-heading">Our Team</h1>
+    <div class="underline" id="team"></div>
+  </div>
+  <div class="cards-wrapper">
+    <div class="card" data-tilt>
+      <div class="card-img-wrapper">
+        <img
+          src="{{ url_for('static', filename='images/tejas.jpg')}}"
+          alt="Developer"
+        />
+      </div>
+      <div class="card-info">
+        <h2>Tejas Parit</h2>
+        <h3>Student</h3>
+
+        <!-- <button>Read More</button> -->
+      </div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="card-img-wrapper">
+        <img
+          src="{{ url_for('static', filename='images/sarvesh.jpg')}}"
+          alt="CEO"
+        />
+      </div>
+      <div class="card-info">
+        <h2>Sarvesh Sutar</h2>
+        <h3>Student</h3>
+
+        <!-- <button>Read More</button> -->
+      </div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="card-img-wrapper">
+        <img
+          src="{{ url_for('static', filename='images/rutvik.jpg')}}"
+          alt="Designer"
+        />
+      </div>
+      <div class="card-info">
+        <h2>Rutwik Patil</h2>
+        <h3>Student</h3>
+        <!-- <button>Read More</button> -->
+      </div>
+    </div>
+  </div>
+</section>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"
+></script>
+<script src="{{ url_for('static', filename='js/tilt.js')}}"></script>
+
+{% endblock %}

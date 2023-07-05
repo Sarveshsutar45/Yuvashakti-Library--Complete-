@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  background-color: #f1f1f1;
+}
+main {
+  min-height: 80vh;
+}
+header {
+  background-color: #4caf50;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-image: linear-gradient(to bottom right, #4caf50, #3f51b5);
+  padding: 25px 7%;
+}
+h2 {
+  padding: 20px;
+}
+a {
+  text-decoration: none;
+  color: white !important;
+  text-transform: capitalize !important;
+}
+th,
+tr,
+td,
+h2 {
+  text-align: center !important;
+}
+td {
+  padding: 1rem 0 !important;
+  text-transform: capitalize;
+}
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 3%;
+  margin-bottom: 10vh;
+}
+.overview,
+.recent-activity {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.stats {
+  width: 100%;
+}
+
+footer {
+  background-color: #4caf50;
+  color: #fff;
+  margin-top: 10vh;
+  padding: 2rem;
+  text-align: center;
+  background-image: linear-gradient(to bottom right, #4caf50, #3f51b5);
+}
+
+.stat {
+  border: none;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+.flex {
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat h3 {
+  margin-top: 0;
+  color: #4caf50;
+  font-size: 24px;
+}
+
+.recent-activity li {
+  font-size: 1.1rem;
+}
+
+.stat p {
+  font-size: 36px;
+  color: #3f51b5;
+  margin-bottom: 10px;
+}
+nav a {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 1.15rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #ff1100 !important;
+}
+
+.stat button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.stat button:hover {
+  background-color: #3f51b5;
+}

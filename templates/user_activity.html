@@ -1,0 +1,106 @@
+{% extends 'base.html' %} {% block title %}Activities{% endblock %} {% block
+content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+
+
+<div class="container" style="max-width: 90%">
+  <div class="un" style="max-width: 90%">
+    <h3 style="font-size: 1rem" id="book-count">
+      Activities: {{activities|length}}
+    </h3>
+    <h3 style="font-size: 1.5rem">All Activities</h3>
+    <div></div>
+  </div>
+  <div class="un">
+    <input
+      style="margin-top: 1rem; width: 40%"
+      type="text"
+      id="search"
+      x
+      placeholder="Search..."
+    />
+    <div class="fil-date">
+      <label for="">From: &nbsp;</label>
+      <input
+        style="margin-right: 2rem; width: max-content"
+        type="date"
+        id="from-date"
+      />
+      <label for="">To: &nbsp;</label>
+      <input
+        style="margin-top: 1rem; width: max-content"
+        type="date"
+        id="to-date"
+      />
+    </div>
+  </div>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>Activity</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for activity in activities %}
+      <tr>
+        <td>{{ activity.id }}</td>
+        <td>
+          <a
+            href="/user-details/{{ activity.user_id }}"
+            style="color: black !important; text-decoration: underline"
+            >{{ activity.username }}</a
+          >
+        </td>
+        <td>{{ activity.name }}</td>
+        <td>{{ activity.activity }}</td>
+        <td class="act-date" data-date="{{ activity.date }}">
+          {{ activity.date.strftime('%d %b, %Y') }} at {{
+          activity.date.strftime('%I:%M %p') }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+
+  const fromDate = document.getElementById("from-date");
+  const toDate = document.getElementById("to-date");
+  const addDate = document.querySelectorAll(".act-date");
+  function filterDates() {
+    const fromValue = fromDate.value ? new Date(fromDate.value) : null;
+    const toValue = toDate.value ? new Date(toDate.value) : null;
+
+    if (fromValue && toValue && fromValue > toValue) {
+      alert("Please select a 'From' date that is earlier than the 'To' date.");
+      location.reload();
+    }
+
+    for (let i = 0; i < addDate.length; i++) {
+      // get the date value from the data-date attribute
+      const addDateValue = new Date(addDate[i].dataset.date);
+      let displayRow = true;
+
+      if (fromValue && addDateValue < fromValue) {
+        displayRow = false;
+      }
+
+      if (toValue && addDateValue > toValue) {
+        displayRow = false;
+      }
+
+      addDate[i].parentNode.style.display = displayRow ? "" : "none";
+    }
+  }
+  fromDate.addEventListener("change", filterDates);
+  toDate.addEventListener("change", filterDates);
+</script>
+<script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+{% endblock %}

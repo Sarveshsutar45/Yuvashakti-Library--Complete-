@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='images/favicon.png') }}"
+      type="image/gif"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/sidebar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/dash.css') }}"
+    />
+  </head>
+  <body>
+    <div class="sidebar close">
+      <div class="logo-details">
+        <img
+          class="cl-btn"
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="logo"
+        />
+        <span class="logo_name" style="margin-left: 1rem">Admin</span>
+      </div>
+      <ul class="nav-links">
+        <li>
+          <a href="/dashboard">
+            <i class="bx bx-grid-alt"></i>
+            <span class="link_name">Dashboard</span>
+          </a>
+        </li>
+
+        <li>
+          <div class="icon-link">
+            <a href="/users">
+              <i class="bx bx-group"></i>
+              <span class="link_name">users</span>
+            </a>
+            <i class="bx bxs-chevron-down arrow"></i>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name" href="/users">Users</a></li>
+            <li><a href="/users-activity">Activity</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="icon-link">
+            <a href="/books">
+              <i class="bx bx-book-alt"></i>
+              <span class="link_name">Books</span>
+            </a>
+            <i class="bx bxs-chevron-down arrow"></i>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name" href="/books">Books</a></li>
+            <li><a href="/borrows">Borrow</a></li>
+            <li><a href="/returns">Return</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="/reports">
+            <i class="bx bx-pie-chart-alt-2"></i>
+            <span class="link_name">Reports</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/home">
+            <i class="bx bx-home"></i>
+            <span class="link_name">Home</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/logout" class="close_log">
+            <i class="bx bx-log-out"></i>
+          </a>
+          <div class="profile-details">
+            <div class="name-job" style="margin-left: 1rem">
+              <div class="profile_name">Sarvesh Sutar</div>
+              <div class="job">Software Engineer</div>
+            </div>
+            <a href="/logout">
+              <i class="bx bx-log-out"></i>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <section class="home-section">
+      <div class="home-content">
+        <div class="">
+          <header
+            style="padding: 2%; margin-bottom: 5vh; justify-content: center"
+          >
+            <a href="/"><h1>Yuvashakti Vachnalaya Admin</h1></a>
+          </header>
+          <main>{% block content %}{% endblock %}</main>
+        </div>
+      </div>
+      <footer>&copy; 2023 Yuvashakti Vachnalaya. All Rights Reserved</footer>
+    </section>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+  </body>
+</html>

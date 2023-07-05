@@ -1,0 +1,166 @@
+{% if admin %} {% extends 'base.html' %} {% else %} {% extends 'user_base.html'
+%} {% endif %} {% block title %}Yuvashakti Books{% endblock %} {% block content
+%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+
+<!-- <a href="/addbook"><button>Add Book</button></a> -->
+
+{% if admin %}
+<div class="container" style="max-width: 95%; padding-top: 0">
+  <div class="un" style="margin-bottom: 1rem">
+    <h3 style="font-size: 1.2rem" id="book-count">
+      Books Collection : {{books|length}}
+    </h3>
+    <h3 style="font-size: 1.5rem">All Books</h3>
+    <a href="/addbook"><button>Add A Book</button></a>
+  </div>
+
+  <div class="un">
+    <input
+      style="margin-top: 1rem; width: 40%"
+      type="text"
+      id="search"
+      x
+      placeholder="Search..."
+    />
+    <div class="fil-date">
+      <label for="">From: &nbsp;</label>
+      <input
+        style="margin-right: 2rem; width: max-content"
+        type="date"
+        id="from-date"
+      />
+      <label for="">To: &nbsp;</label>
+      <input
+        style="margin-top: 1rem; width: max-content"
+        type="date"
+        id="to-date"
+      />
+    </div>
+  </div>
+  {% else %} {% if request.path == '/my-books' %}
+  <div class="container" style="max-width: 93%">
+    {% elif request.path == '/books' %}
+    <div class="container" style="max-width: 82%">
+      {% endif %}
+      <div class="un" style="margin-top: 1rem">
+        <h3>Username: {{username}}</h3>
+        {% if request.path == '/my-books' %}
+        <small><strong>Late Fees: Rs.10/- per day</strong></small>
+        {% elif request.path == '/books' %}
+        <small><strong>Books Available: {{books|length}}</strong></small>
+        {% endif %}
+      </div>
+      <input
+        style="margin-top: 1rem"
+        type="text"
+        id="search"
+        placeholder="Search..."
+      />
+      {% endif %}
+      <table id="table">
+        <thead>
+          <tr>
+            {% if request.path == '/my-books' or admin %}
+            <th>#</th>
+            {% endif %}
+            <th>Book ID</th>
+            <th>Book Name</th>
+            <th>Publisher</th>
+            <th>Category</th>
+            <th>Author</th>
+            {% if request.path == '/my-books' %}
+            <th>Borrow Date</th>
+            <th>Due Date</th>
+            <th>Submitted Date</th>
+            {% elif admin %}
+            <th>Copies</th>
+            <th>Price</th>
+            {% else %}
+            <th>Status</th>
+            {% endif %} {% if admin %}
+            <th>Added On</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for book in books %}
+          <tr class="row">
+            {% if request.path == '/my-books' or admin %}
+            <td class="index">{{ loop.index }}</td>
+            {% endif %}
+            <td>{{ book.book_id }}</td>
+            {% if admin%}
+            <td>
+              <a
+                href="/book-details/{{ book.book_id }}"
+                style="color: black !important; text-decoration: underline"
+                >{{ book.name }}</a
+              >
+            </td>
+            {% else %}
+            <td>{{ book.name }}</td>
+            {% endif %}
+            <td>{{ book.publisher }}</td>
+            <td>{{ book.category }}</td>
+            <td>{{ book.author }}</td>
+            {% if request.path == '/my-books' %}
+            <td>{{ book.borrow_date }}</td>
+            <td>{{ book.return_date }}</td>
+            <td>{{ book.submitted_date }}</td>
+            {% elif admin %}
+            <td>{{ book.copies_available }}</td>
+            <td>₹{{ book.price }}</td>
+            {% else %}
+            <td>{{ book.status }}</td>
+            {% endif %} {% if admin %}
+            <td class="add-date" data-date="{{ book.added_on }}">
+              {{ book.added_on.strftime('%d-%m-%Y') }}
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+    {% if admin %}
+    <script>
+      const fromDate = document.getElementById("from-date");
+      const toDate = document.getElementById("to-date");
+      const addDate = document.querySelectorAll(".add-date");
+      function filterDates() {
+        const fromValue = fromDate.value ? new Date(fromDate.value) : null;
+        const toValue = toDate.value ? new Date(toDate.value) : null;
+
+        if (fromValue && toValue && fromValue > toValue) {
+          alert(
+            "Please select a 'From' date that is earlier than the 'To' date."
+          );
+          location.reload();
+        }
+
+        for (let i = 0; i < addDate.length; i++) {
+          // get the date value from the data-date attribute
+          const addDateValue = new Date(addDate[i].dataset.date);
+          let displayRow = true;
+
+          if (fromValue && addDateValue < fromValue) {
+            displayRow = false;
+          }
+
+          if (toValue && addDateValue > toValue) {
+            displayRow = false;
+          }
+
+          addDate[i].parentNode.style.display = displayRow ? "" : "none";
+        }
+      }
+      fromDate.addEventListener("change", filterDates);
+      toDate.addEventListener("change", filterDates);
+    </script>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

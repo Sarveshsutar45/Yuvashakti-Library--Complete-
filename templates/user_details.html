@@ -1,0 +1,232 @@
+{% extends 'base.html' %} {% block title %}User Details{% endblock %} {% block
+content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+<style>
+  .dialog {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .dialog-content {
+    background-color: #fefefe;
+    margin: 4% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .dialog label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .dialog input[type="text"],
+  .dialog input[type="number"],
+  .dialog textarea {
+    resize: vertical;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  .dialog input:focus {
+    outline: 1px solid #aaa;
+  }
+
+  .dialog input[type="submit"],
+  #back {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .dialog input[type="submit"]:hover {
+    background-color: #3e8e41;
+  }
+</style>
+<div class="container" style="padding-top: 0; max-width: 85%">
+  <div class="un" style="margin-bottom: 1rem">
+    <h3 style="font-size: 1rem" id="book-count">
+      Not Returned: {{ not_return }}
+    </h3>
+    <h2 style="padding-top: 0">{{ name }}<small>'s History </small></h2>
+    <button id="send-mail">Send Mail</button>
+  </div>
+  <div class="un">
+    <input
+      style="width: 40%"
+      type="text"
+      id="search"
+      x
+      placeholder="Search..."
+    />
+    <div class="fil-date">
+      <label for="">From: &nbsp;</label>
+      <input
+        style="margin-right: 2rem; width: max-content"
+        type="date"
+        id="from-date"
+      />
+      <label for="">To: &nbsp;</label>
+      <input style="width: max-content" type="date" id="to-date" />
+    </div>
+  </div>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Book Name</th>
+        <th>Book ID</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Submit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>{{ book.id }}</td>
+        <td>
+          <a
+            href="/book-details/{{ book.book_id }}"
+            style="color: black !important; text-decoration: underline"
+            >{{ book.book_name }}</a
+          >
+        </td>
+        <td>{{ book.book_id }}</td>
+        <td class="bor-date" data-date="{{ book.borrow_date }}">
+          {{ book.borrow_date.strftime('%d-%m-%Y') }}
+        </td>
+        <td>{{ book.due_date.strftime('%d-%m-%Y') }}</td>
+        {% if book.submitted_date == None %}
+        <td>
+          <button
+            id="myButton"
+            onclick="submit('{{ user_id }}', '{{ book.book_id }}')"
+          >
+            Submit
+          </button>
+        </td>
+        {% else %}
+        <td>{{ book.submitted_date.strftime('%d-%m-%Y') }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<form id="email-form" method="POST" class="dialog">
+  <div class="dialog-content">
+    <h2>Fill in Your Details</h2>
+    <br />
+    <div class="form-group">
+      <label for="email">Recipient Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="{{email}}"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="subject">Subject:</label>
+      <input type="text" id="phone" name="subject" required />
+    </div>
+    <div class="form-group">
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" required> </textarea>
+    </div>
+    <input type="submit" value="Send Mail" style="width: 40%" />
+    <button type="button" id="back">Back</button>
+  </div>
+</form>
+<script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+<script>
+  const sendMail = document.getElementById("send-mail");
+  const backBtn = document.getElementById("back");
+  sendMail.addEventListener("click", () => {
+    document.querySelector(".dialog").style.display = "block";
+  });
+  backBtn.addEventListener("click", () => {
+    document.querySelector(".dialog").style.display = "none";
+  });
+  document
+    .getElementById("email-form")
+    .addEventListener("submit", function (event) {
+      // Prevent default form submission
+      event.preventDefault();
+
+      // Get form data
+      var formData = new FormData(this);
+
+      // Send XMLHttpRequest
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/send_email");
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          alert(xhr.responseText);
+        } else {
+          alert("Error: " + xhr.statusText);
+        }
+        document.querySelector(".dialog").style.display = "none";
+      };
+      xhr.onerror = function () {
+        alert("Error: " + xhr.statusText);
+        document.querySelector(".dialog").style.display = "none";
+      };
+      xhr.send(formData);
+    });
+
+  const fromDate = document.getElementById("from-date");
+  const toDate = document.getElementById("to-date");
+  const borDate = document.querySelectorAll(".bor-date");
+  function filterDates() {
+    const fromValue = fromDate.value ? new Date(fromDate.value) : null;
+    const toValue = toDate.value ? new Date(toDate.value) : null;
+
+    if (fromValue && toValue && fromValue > toValue) {
+      alert("Please select a 'From' date that is earlier than the 'To' date.");
+      location.reload();
+    }
+
+    for (let i = 0; i < borDate.length; i++) {
+      // get the date value from the data-date attribute
+      const borDateValue = new Date(borDate[i].dataset.date);
+      let displayRow = true;
+
+      if (fromValue && borDateValue < fromValue) {
+        displayRow = false;
+      }
+
+      if (toValue && borDateValue > toValue) {
+        displayRow = false;
+      }
+
+      borDate[i].parentNode.style.display = displayRow ? "" : "none";
+    }
+  }
+  fromDate.addEventListener("change", filterDates);
+  toDate.addEventListener("change", filterDates);
+</script>
+{% endblock %}

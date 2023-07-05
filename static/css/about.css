@@ -1,0 +1,182 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Comic Sans Ms;
+  scroll-behavior: smooth;
+}
+h1 {
+  text-align: center;
+}
+body {
+  background: rgba(0, 255, 255, 0.193);
+}
+.flex-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10vh;
+}
+
+.text {
+  margin: 0 2%;
+}
+
+.right {
+  flex-direction: row-reverse;
+}
+h4 {
+  color: rgb(2, 2, 198);
+  /* font-family: ; */
+}
+
+p {
+  color: gray;
+}
+
+.about {
+  padding:  5%;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+.img-left {
+  margin-right: 20px;
+}
+.text-center {
+  text-align: center;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5%;
+  padding-bottom: 20rem;
+}
+
+.cards-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 8rem;
+  width: 100%;
+}
+
+.card {
+  height: 30rem;
+  width: 20rem;
+  box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.4);
+  border-radius: 0.5rem;
+  position: relative;
+}
+
+.card-img-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #262626;
+  border-radius: 0.5rem;
+}
+
+.card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  border-radius: 0.5rem;
+  transition: opacity 0.3s;
+}
+
+.card:hover .card-img-wrapper img {
+  opacity: 0.5;
+}
+
+.card-info {
+  position: relative;
+  bottom: 0;
+  padding: 2rem;
+  text-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.card:hover .card-info {
+  bottom: 2rem;
+  opacity: 1;
+  visibility: visible;
+}
+
+.card-info h2 {
+  font-family: "Baloo Da 2", serif;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  font-weight: 300;
+  color: #eee;
+  white-space: nowrap;
+}
+
+.card-info h3 {
+  font-family: "Muli", serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #a52a2a;
+  margin-bottom: 1rem;
+}
+
+.card-info p {
+  font-family: "Baloo da 2", serif;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+  font-weight: 300;
+  color: #eee;
+  width: 80%;
+  margin-bottom: 2rem;
+}
+
+.card-info button {
+  width: 10rem;
+  height: 3rem;
+  background-color: #c29525;
+  border: none;
+  font-family: "Baloo Da 2", serif;
+  font-size: 1.4rem;
+  line-height: 1.5rem;
+  color: #eee;
+  border-radius: 0.3rem;
+  box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.4);
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7rem 0 10rem 0;
+}
+
+.section-header-about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7rem 0 2rem 0;
+}
+
+.section-heading {
+  font-family: "Muli", serif;
+  font-size: 5rem;
+  font-weight: 300;
+  color: #4b4b4b;
+  margin-bottom: 6rem;
+}
+
+.underline {
+  width: 12rem;
+  height: 0.3rem;
+  background-color: #c29525;
+}
+.serviceImg {
+  height: 80%;
+  width: 43%;
+  align-items: center;
+}

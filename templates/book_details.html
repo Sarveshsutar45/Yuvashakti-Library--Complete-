@@ -1,0 +1,104 @@
+{% extends 'base.html' %} {% block title %}Yuvashakti Books{% endblock %} {%
+block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+
+<div class="container" style="max-width: 85%; padding-top: 0">
+  <div class="un" style="justify-content: center">
+    <h3 style="font-size: 1.5rem">{{book_name}}<small>'s History </small></h2>
+  </div>
+
+  <div class="un">
+    <input
+      style="margin-top: 1rem; width: 40%"
+      type="text"
+      id="search"
+      x
+      placeholder="Search..."
+    />
+    <div class="fil-date">
+      <label for="">From: &nbsp;</label>
+      <input
+        style="margin-right: 2rem; width: max-content"
+        type="date"
+        id="from-date"
+      />
+      <label for="">To: &nbsp;</label>
+      <input
+        style="margin-top: 1rem; width: max-content"
+        type="date"
+        id="to-date"
+      />
+    </div>
+  </div>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Full Name</th>
+        <th>Book ID</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Submitted Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr id="row-{{loop.index}}" class="rows">
+        <td class="index">{{loop.index}}</td>
+        <td>
+          <a
+            href="/user-details/{{ user.user_id }}"
+            style="color: black !important; text-decoration: underline"
+            >{{ user.name }}</a
+          >
+        </td>
+        <td>{{user.book_id}}</td>
+        <td class="bor-date" data-date="{{user.borrow_date}}">
+          {{ user.borrow_date.strftime("%d-%m-%Y") }}
+        </td>
+        <td>{{user.due_date.strftime("%d-%m-%Y")}}</td>
+        {% if user.submitted_date == None %}
+        <td>-</td>
+        {% else %}
+        <td>{{user.submitted_date.strftime("%d-%m-%Y")}}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  const fromDate = document.getElementById("from-date");
+  const toDate = document.getElementById("to-date");
+  const borDate = document.querySelectorAll(".bor-date");
+  function filterDates() {
+    const fromValue = fromDate.value ? new Date(fromDate.value) : null;
+    const toValue = toDate.value ? new Date(toDate.value) : null;
+    const index = document.querySelectorAll(".index");
+
+    if (fromValue && toValue && fromValue > toValue) {
+      alert("Please select a 'From' date that is earlier than the 'To' date.");
+      location.reload();
+    }
+
+    for (let i = 0; i < borDate.length; i++) {
+      // get the date value from the data-date attribute
+      const borDateValue = new Date(borDate[i].dataset.date);
+      let displayRow = true;
+
+      if (fromValue && borDateValue < fromValue) {
+        displayRow = false;
+      }
+
+      if (toValue && borDateValue > toValue) {
+        displayRow = false;
+      }
+
+      borDate[i].parentNode.style.display = displayRow ? "" : "none";
+    }
+  }
+  fromDate.addEventListener("change", filterDates);
+  toDate.addEventListener("change", filterDates);
+</script>
+<script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+{% endblock %}

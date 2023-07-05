@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/css/home.css" />
+    <!-- favicon png-->
+    <link rel="icon" href="static/images/favicon.png" type="image/png" />
+
+    <title>Yuvashakti Library</title>
+  </head>
+  <body>
+    <section class="header">
+      <nav>
+        <h4 style="text-transform: uppercase">Yuvashakti Library</h4>
+        <div class="nav-links">
+          <ul>
+            <li><a href="/gallery">GALLERY</a></li>
+            <li><a href="/about">ABOUT US</a></li>
+            <li><a href="/login">LOGIN</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="main">
+        <h1>We are Broadway</h1>
+        <a href="/register" class="btn-main">Get Started</a>
+      </div>
+    </section>
+
+    <footer id="foot" class="site-footer">
+      <div id="footer-container">
+        <div id="footer-grid">
+          <div id="left-footer-section" class="footer-section">
+            <div id="footer-search"></div>
+            <div class="footer-information">
+              <p>
+                <img
+                  src="https://img.icons8.com/ios-filled/12/999999/marker.png"
+                />Nerli, Kolhapur, Maharashtra 416002
+              </p>
+              <p>
+                <img
+                  src="https://img.icons8.com/ios-filled/12/999999/phone.png"
+                />(+91) 9876543210
+              </p>
+              <p>
+                <a href="mailto:sarvesh@reply.in " style="color: inherit">
+                  <img
+                    src="https://img.icons8.com/ios-filled/12/999999/mail.png"
+                  />sarvesh@reply.in
+                </a>
+              </p>
+              <p>
+                <img
+                  src="https://img.icons8.com/ios-filled/12/999999/clock.png"
+                />8:00 AM – 8:00 PM
+              </p>
+            </div>
+          </div>
+          <div id="right-footer-section" class="footer-section">
+            <div class="footer-links">
+              <ul>
+                <li><a href="/about#team">OUR TEAM</a></li>
+                <li><a href="/gallery">GALLERY</a></li>
+                <li><a href="/about">ABOUT US</a></li>
+                <li><a href="/login">LOGIN</a></li>
+                <li><a href="mailto:sarvesh@reply.in">CONTACT US</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="copyright-information">
+          <div id="footer-logo-section">
+            <div id="footer-logo">
+              <img
+                src="{{ url_for('static', filename='images/logo.png') }}"
+                alt=""
+              />
+            </div>
+          </div>
+          <div id="copyright-text">
+            &copy; Yuvashakti Library 2023 All rights reserved.
+          </div>
+          <div id="social-buttons">
+            <img
+              src="https://img.icons8.com/ios-filled/25/999999/facebook--v1.png"
+            /><img
+              src="https://img.icons8.com/ios-filled/25/999999/telegram-app.png"
+            /><img
+              src="https://img.icons8.com/ios-filled/25/999999/pinterest--v1.png"
+            /><img
+              src="https://img.icons8.com/ios-filled/25/999999/instagram--v1.png"
+            />
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

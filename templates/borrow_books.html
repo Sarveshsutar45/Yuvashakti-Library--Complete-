@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% block title %}Borrow Books{% endblock %} {% block
+content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+<div class="container">
+  <form id="borrow-form" action="/borrow/{{user_id}}" method="post">
+    <div class="un" style="margin-bottom: 1rem;">
+      <h3>Full Name: {{user_name}}</h3>
+      <button type="submit">Borrow Books</button>
+    </div>
+    <input type="text" id="search" placeholder="Search..." />
+    <table id="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>#</th>
+          <th>Book ID</th>
+          <th>Book Name</th>
+          <th>Category</th>
+          <th>Author</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td >
+            <input style="margin: 0;" type="checkbox" name="{{ book.book_id }}" id="" />
+          </td>
+          <td>{{ book.id }}</td>
+          <td>{{ book.book_id }}</td>
+          <td>{{ book.name }}</td>
+          <td>{{ book.category }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+</div>
+<script>
+  const form = document.getElementById("borrow-form");
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const checkboxes = form.querySelectorAll("input[type='checkbox']");
+    const checkedCheckboxes = Array.from(checkboxes).filter(
+      (checkbox) => checkbox.checked
+    );
+    if (checkedCheckboxes.length === 0) {
+      alert("Please select at least one book to borrow.");
+      return;
+    }
+    try {
+      const response = await fetch(event.target.action, {
+        method: event.target.method,
+        body: new FormData(event.target),
+      });
+      const data = await response.json();
+      alert(data.message);
+      location.reload();
+    } catch (err) {
+      alert("User not found");
+      // deselect all checkboxes
+      checkboxes.forEach((checkbox) => (checkbox.checked = false));
+    }
+  });
+</script>
+<script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+{% endblock %}

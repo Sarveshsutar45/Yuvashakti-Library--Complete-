@@ -1,0 +1,544 @@
+{% extends 'base.html' %} {% block title %}Yuvashakti Report{% endblock %} {%
+block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+
+<style>
+  * {
+    scroll-behavior: smooth;
+  }
+  .title {
+    text-align: center;
+    margin: 1rem;
+  }
+  form {
+    padding-left: 5rem;
+  }
+  .overview {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+  .stats {
+    box-shadow: 2px 6px 5px rgba(0, 0, 0, 0.3);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  td a,
+  th a {
+    color: black !important;
+  }
+
+  td,
+  th {
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+
+  th {
+    background-color: rgb(239, 239, 239);
+  }
+
+  .stat {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .box {
+    padding: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+</style>
+
+<div class="title">
+  <h1>Reports</h1>
+</div>
+
+<form id="date-form" method="POST" class="un" style="justify-content: center">
+  <div class="fil-date">
+    <label for="">From: &nbsp;</label>
+    <input
+      style="margin-right: 2rem; width: max-content"
+      type="date"
+      id="from-date"
+      required
+    />
+    <label for="">To: &nbsp;</label>
+    <input
+      style="margin-top: 1rem; width: max-content"
+      type="date"
+      id="to-date"
+      required
+    />
+    <button type="submit">Submit</button>
+  </div>
+</form>
+
+<section id="rep" style="display: none" class="dashboard">
+  <div class="overview">
+    <div class="stats">
+      <table>
+        <tr>
+          <th><a href="#table-users">Users Joined</a></th>
+          <th><a href="#table-books">Books Collection</a></th>
+          <th><a href="#table-books">Copies Added</a></th>
+        </tr>
+        <tr>
+          <td>
+            <div class="box">
+              <p id="user-count"></p>
+            </div>
+          </td>
+          <td>
+            <div class="box">
+              <p id="book-count"></p>
+            </div>
+          </td>
+          <td>
+            <div class="box">
+              <p id="copy-count"></p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><a href="#table-borrowed">Books Borrowed</a></th>
+          <th><a href="#table-returned">Books Returned</a></th>
+          <th><a href="#table-activities">All Activities</a></th>
+        </tr>
+        <tr>
+          <td>
+            <div class="box">
+              <p id="borrowed-count"></p>
+            </div>
+          </td>
+          <td>
+            <div class="box">
+              <p id="returned-count"></p>
+            </div>
+          </td>
+          <td>
+            <div class="box">
+              <p id="activity-count"></p>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div
+  class="tables"
+  id="tables"
+  style="
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  "
+>
+  <table id="table-users" style="max-width: 95%">
+    <h2>Users Joined</h2>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Full Name</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Joined On</th>
+        <th>Borrow</th>
+        <th>History</th>
+      </tr>
+    </thead>
+    <tbody id="table-use"></tbody>
+  </table>
+  <table id="table-books" style="max-width: 95%">
+    <thead>
+      <h2>Books Collection and Copies</h2>
+      <tr>
+        <th>#</th>
+        <th>Book ID</th>
+        <th>Book Name</th>
+        <th>Publisher</th>
+        <th>Category</th>
+        <th>Author</th>
+        <th>Copies</th>
+        <th>Copies</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Added On</th>
+      </tr>
+    </thead>
+    <tbody id="table-book"></tbody>
+  </table>
+  <table id="table-borrowed" style="max-width: 95%">
+    <h2>Books Borrowed</h2>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Full Name</th>
+        <th>Book ID</th>
+        <th>Book Name</th>
+        <th>Category</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+    <tbody id="table-bor"></tbody>
+  </table>
+  <table id="table-returned" style="max-width: 95%">
+    <h2>Books Returned</h2>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Full Name</th>
+        <th>Book ID</th>
+        <th>Book Name</th>
+        <!-- <th>Publisher</th> -->
+        <!-- <th>Author</th> -->
+        <th>Category</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Submitted Date</th>
+      </tr>
+    </thead>
+    <tbody id="table-ret"></tbody>
+  </table>
+  <table id="table-activities" style="max-width: 95%">
+    <h2>All Activities</h2>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>Activity</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="table-act"></tbody>
+  </table>
+</div>
+
+<script>
+  let res = false;
+
+  function checkDatesValidity() {
+    let fromDate = document.getElementById("from-date").value;
+    let toDate = document.getElementById("to-date").value;
+    // check if the date is valid
+    if (fromDate > toDate) {
+      alert("Please enter a valid date where From Date < To Date");
+      document.getElementById("rep").style.display = "none";
+      document.getElementById("tables").style.display = "none";
+      return false;
+    } else if (fromDate === "" || toDate === "") {
+      alert("Please enter a valid date");
+      document.getElementById("rep").style.display = "none";
+      document.getElementById("tables").style.display = "none";
+      return false;
+    }
+    return true;
+  }
+
+  document.getElementById("date-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!checkDatesValidity()) return;
+    let fromDate = document.getElementById("from-date").value;
+    let toDate = document.getElementById("to-date").value;
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/reports?from_date=${fromDate}&to_date=${toDate}`);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        res = true;
+        const data = JSON.parse(xhr.responseText);
+        document.getElementById("user-count").textContent = data.user_count;
+        document.getElementById("book-count").textContent = data.book_count;
+        document.getElementById("borrowed-count").textContent =
+          data.books_borrowed_count;
+        document.getElementById("copy-count").textContent = data.copies_count;
+        document.getElementById("returned-count").textContent =
+          data.books_returned_count;
+        document.getElementById("activity-count").textContent =
+          data.activity_count;
+        // check every count is greater than 0
+        if (
+          data.user_count === 0 &&
+          data.book_count === 0 &&
+          data.books_borrowed_count === 0 &&
+          data.copies_count === 0 &&
+          data.books_returned_count === 0 &&
+          data.activity_count === 0
+        ) {
+          alert("No data found for the given dates");
+          document.getElementById("rep").style.display = "none";
+          document.getElementById("tables").style.display = "none";
+          document.getElementById("date-form").reset();
+          return;
+        }
+
+        document.getElementById("rep").style.display = "block";
+        document.getElementById("tables").style.display = "flex";
+
+        const tableRet = document.getElementById("table-ret");
+        tableRet.innerHTML = "";
+
+        let returned = data.returned;
+        // Generate new table rows
+        returned.forEach(function (book, index) {
+          const row = document.createElement("tr");
+          row.id = `row-${index + 1}`;
+          row.className = "rows";
+
+          const indexCell = document.createElement("td");
+          indexCell.textContent = index + 1;
+          row.appendChild(indexCell);
+
+          const fullNameCell = document.createElement("td");
+          const fullNameLink = document.createElement("a");
+          fullNameLink.href = `/user-details/${book.user_id}`;
+          fullNameLink.style.color = "black !important";
+          fullNameLink.style.textDecoration = "underline";
+          fullNameLink.textContent = book.fullname;
+          fullNameCell.appendChild(fullNameLink);
+          row.appendChild(fullNameCell);
+
+          const bookIdCell = document.createElement("td");
+          bookIdCell.textContent = book.book_id;
+          row.appendChild(bookIdCell);
+
+          const bookNameCell = document.createElement("td");
+          const bookNameLink = document.createElement("a");
+          bookNameLink.href = `/book-details/${book.book_id}`;
+          bookNameLink.style.color = "black !important";
+          bookNameLink.style.textDecoration = "underline";
+          bookNameLink.textContent = book.book_name;
+          bookNameCell.appendChild(bookNameLink);
+          row.appendChild(bookNameCell);
+
+          const categoryCell = document.createElement("td");
+          categoryCell.textContent = book.category;
+          row.appendChild(categoryCell);
+
+          const borrowDateCell = document.createElement("td");
+          borrowDateCell.textContent = book.borrow_date;
+          row.appendChild(borrowDateCell);
+
+          const returnDateCell = document.createElement("td");
+          returnDateCell.textContent = book.return_date;
+          row.appendChild(returnDateCell);
+
+          const submitDateCell = document.createElement("td");
+          submitDateCell.textContent = book.submitted_date;
+          row.appendChild(submitDateCell);
+          tableRet.appendChild(row);
+        });
+
+        const tableBor = document.getElementById("table-bor");
+        tableBor.innerHTML = "";
+
+        let borrowed = data.borrowed;
+        // Generate new table rows
+        borrowed.forEach(function (book, index) {
+          const row = document.createElement("tr");
+          row.id = `row-${index + 1}`;
+          row.className = "rows";
+
+          const indexCell = document.createElement("td");
+          indexCell.textContent = index + 1;
+          row.appendChild(indexCell);
+
+          const fullNameCell = document.createElement("td");
+          const fullNameLink = document.createElement("a");
+          fullNameLink.href = `/user-details/${book.user_id}`;
+          fullNameLink.style.color = "black !important";
+          fullNameLink.style.textDecoration = "underline";
+          fullNameLink.textContent = book.fullname;
+          fullNameCell.appendChild(fullNameLink);
+          row.appendChild(fullNameCell);
+
+          const bookIdCell = document.createElement("td");
+          bookIdCell.textContent = book.book_id;
+          row.appendChild(bookIdCell);
+
+          const bookNameCell = document.createElement("td");
+          const bookNameLink = document.createElement("a");
+          bookNameLink.href = `/book-details/${book.book_id}`;
+          bookNameLink.style.color = "black !important";
+          bookNameLink.style.textDecoration = "underline";
+          bookNameLink.textContent = book.book_name;
+          bookNameCell.appendChild(bookNameLink);
+          row.appendChild(bookNameCell);
+
+          const categoryCell = document.createElement("td");
+          categoryCell.textContent = book.category;
+          row.appendChild(categoryCell);
+
+          const borrowDateCell = document.createElement("td");
+          borrowDateCell.textContent = book.borrow_date;
+          row.appendChild(borrowDateCell);
+
+          const returnDateCell = document.createElement("td");
+          returnDateCell.textContent = book.return_date;
+          row.appendChild(returnDateCell);
+
+          tableBor.appendChild(row);
+        });
+
+        let users = data.users;
+        const tableUseBody = document.getElementById("table-use");
+        tableUseBody.innerHTML = "";
+        users.forEach(function (user) {
+          const row = document.createElement("tr");
+
+          const idCell = document.createElement("td");
+          idCell.textContent = user.id;
+          row.appendChild(idCell);
+
+          const nameCell = document.createElement("td");
+          nameCell.textContent = user.name;
+          row.appendChild(nameCell);
+
+          const usernameCell = document.createElement("td");
+          usernameCell.textContent = user.username;
+          row.appendChild(usernameCell);
+
+          const emailCell = document.createElement("td");
+          emailCell.style.width = "10%";
+          emailCell.style.wordBreak = "break-all";
+          emailCell.textContent = user.email;
+          row.appendChild(emailCell);
+
+          const regOnCell = document.createElement("td");
+          const regOnDate = document.createElement("span");
+          regOnDate.textContent = user.reg_on;
+          regOnCell.appendChild(regOnDate);
+          row.appendChild(regOnCell);
+
+          const borrowButtonCell = document.createElement("td");
+          const borrowButtonLink = document.createElement("a");
+          borrowButtonLink.href = `borrow-books/${user.id}`;
+          const borrowButton = document.createElement("button");
+          borrowButton.textContent = "Borrow";
+          borrowButtonLink.appendChild(borrowButton);
+          borrowButtonCell.appendChild(borrowButtonLink);
+          row.appendChild(borrowButtonCell);
+
+          const detailsButtonCell = document.createElement("td");
+          const detailsButtonLink = document.createElement("a");
+          detailsButtonLink.href = `user-details/${user.id}`;
+          const detailsButton = document.createElement("button");
+          detailsButton.textContent = "Details";
+          detailsButtonLink.appendChild(detailsButton);
+          detailsButtonCell.appendChild(detailsButtonLink);
+          row.appendChild(detailsButtonCell);
+          tableUseBody.appendChild(row);
+        });
+
+        let activities = data.activities;
+        const tableActBody = document.getElementById("table-act");
+        tableActBody.innerHTML = "";
+        activities.forEach(function (activity) {
+          const row = document.createElement("tr");
+
+          const idCell = document.createElement("td");
+          idCell.textContent = activity.id;
+          row.appendChild(idCell);
+
+          const usernameCell = document.createElement("td");
+          const usernameLink = document.createElement("a");
+          usernameLink.href = `/user-details/${activity.user_id}`;
+          usernameLink.style.color = "black !important";
+          usernameLink.style.textDecoration = "underline";
+          usernameLink.textContent = activity.username;
+          usernameCell.appendChild(usernameLink);
+          row.appendChild(usernameCell);
+
+          const nameCell = document.createElement("td");
+          nameCell.textContent = activity.name;
+          row.appendChild(nameCell);
+
+          const activityCell = document.createElement("td");
+          activityCell.textContent = activity.activity;
+          row.appendChild(activityCell);
+
+          const dateCell = document.createElement("td");
+          const dateSpan = document.createElement("span");
+          dateSpan.textContent = activity.date;
+          dateCell.appendChild(dateSpan);
+          row.appendChild(dateCell);
+
+          tableActBody.appendChild(row);
+        });
+
+        let books = data.books;
+        const tableBookBody = document.getElementById("table-book");
+        tableBookBody.innerHTML = "";
+        books.forEach(function (book, index) {
+          const row = document.createElement("tr");
+          row.className = "row";
+
+          const indexCell = document.createElement("td");
+          indexCell.className = "index";
+          indexCell.textContent = index + 1;
+          row.appendChild(indexCell);
+
+          const bookIdCell = document.createElement("td");
+          bookIdCell.textContent = book.book_id;
+          row.appendChild(bookIdCell);
+
+          const nameCell = document.createElement("td");
+          const nameLink = document.createElement("a");
+          nameLink.href = `/book-details/${book.book_id}`;
+          nameLink.style.color = "black !important";
+          nameLink.style.textDecoration = "underline";
+          nameLink.textContent = book.name;
+          nameCell.appendChild(nameLink);
+          row.appendChild(nameCell);
+
+          const displayNameCell = document.createElement("td");
+          displayNameCell.textContent = book.name;
+          row.appendChild(displayNameCell);
+
+          const publisherCell = document.createElement("td");
+          publisherCell.textContent = book.publisher;
+          row.appendChild(publisherCell);
+
+          const categoryCell = document.createElement("td");
+          categoryCell.textContent = book.category;
+          row.appendChild(categoryCell);
+
+          const authorCell = document.createElement("td");
+          authorCell.textContent = book.author;
+          row.appendChild(authorCell);
+
+          const copiesAvailableCell = document.createElement("td");
+          copiesAvailableCell.textContent = book.copies_available;
+          row.appendChild(copiesAvailableCell);
+
+          const priceCell = document.createElement("td");
+          priceCell.textContent = `₹${book.price}`;
+          row.appendChild(priceCell);
+
+          const statusCell = document.createElement("td");
+          statusCell.textContent = book.status;
+          row.appendChild(statusCell);
+
+          const addedOnCell = document.createElement("td");
+          addedOnCell.className = "add-date";
+          addedOnCell.setAttribute("data-date", book.added_on);
+          addedOnCell.textContent = book.added_on;
+          row.appendChild(addedOnCell);
+
+          tableBookBody.appendChild(row);
+        });
+      }
+    };
+    xhr.send();
+  });
+</script>
+
+{% endblock %}

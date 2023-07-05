@@ -1,0 +1,118 @@
+{% extends 'base.html' %} {% block title %}Returned Books{% endblock %} {%
+block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+
+<div class="container" style="max-width: 95%; padding-top: 0">
+  <div class="un" style="justify-content: center">
+    <h3 style="font-size: 1.5rem">All Books Returned</h3>
+  </div>
+
+  <div class="un">
+    <input
+      style="margin-top: 1rem; width: 40%"
+      type="text"
+      id="search"
+      x
+      placeholder="Search..."
+    />
+    <div class="fil-date" style="margin-top: 1rem;">
+      <label for="">From: &nbsp;</label>
+      <input
+        style="margin-right: 2rem; width: max-content"
+        type="date"
+        id="from-date"
+      />
+      <label for="">To: &nbsp;</label>
+      <input style="width: max-content" type="date" id="to-date" />
+    </div>
+  </div>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Full Name</th>
+        <th>Book ID</th>
+        <th>Book Name</th>
+        <!-- <th>Publisher</th> -->
+        <!-- <th>Author</th> -->
+        <th>Category</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Submitted Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr id="row-{{loop.index}}" class="rows">
+        <td class="index">{{loop.index}}</td>
+        <td>
+          <a
+            href="/user-details/{{book.user_id}}"
+            style="color: black !important; text-decoration: underline"
+            >{{book.fullname}}</a
+          >
+        </td>
+        <td>{{book.book_id}}</td>
+        <td>
+          <a
+            href="/book-details/{{book.book_id}}"
+            style="color: black !important; text-decoration: underline"
+            >{{book.book_name}}</a
+          >
+          <!-- <td>{{book.publisher}}</td> -->
+          <!-- <td>{{book.author}}</td> -->
+        </td>
+
+        <td>{{book.category}}</td>
+        <td class="bor-date">{{book.borrow_date.strftime('%d-%m-%Y')}}</td>
+        <td class="due-date">{{book.return_date.strftime('%d-%m-%Y')}}</td>
+        <td class="sub-date" data-date="{{book.submitted_date}}">
+          {{book.submitted_date.strftime('%d-%m-%Y')}}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  const fromDate = document.getElementById("from-date");
+  const toDate = document.getElementById("to-date");
+  const subDate = document.querySelectorAll(".sub-date");
+  function filterDates() {
+    const fromValue = fromDate.value ? new Date(fromDate.value) : null;
+    const toValue = toDate.value ? new Date(toDate.value) : null;
+    const index = document.querySelectorAll(".index");
+
+    if (fromValue && toValue && fromValue > toValue) {
+      alert("Please select a 'From' date that is earlier than the 'To' date.");
+      location.reload();
+    }
+
+    for (let i = 0; i < subDate.length; i++) {
+      const subDateValue = new Date(subDate[i].dataset.date);
+      let displayRow = true;
+
+      if (fromValue && subDateValue < fromValue) {
+        displayRow = false;
+      }
+
+      if (toValue && subDateValue > toValue) {
+        displayRow = false;
+      }
+
+      subDate[i].parentNode.style.display = displayRow ? "" : "none";
+    }
+    // set index values after filtering dates as per the number of rows
+    // selct rows which do not have display none
+    // const rowsDisplayed = document.querySelectorAll(".rows:not([style])");
+    // for (let i = 0; i < rowsDisplayed.length; i++) {
+    //   const row = rowsDisplayed[i];
+    //   const indexCell = row.querySelector(".index");
+    //   indexCell.textContent = i + 1;
+    // }
+  }
+  fromDate.addEventListener("change", filterDates);
+  toDate.addEventListener("change", filterDates);
+</script>
+<script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+{% endblock %}

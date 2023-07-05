@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% block title %}Users{% endblock %} {% block content
+%}
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb.css')}}" />
+
+<div class="container" style="max-width: 90%">
+  <div class="un" style="max-width: 90%">
+    <h3 style="font-size: 1rem" id="book-count">
+      User's Count: {{users|length}}
+    </h3>
+    <h3 style="font-size: 1.5rem">All Users</h3>
+    <div></div>
+  </div>
+  <div class="un">
+    <input
+      style="margin-top: 1rem; width: 40%"
+      type="text"
+      id="search"
+      x
+      placeholder="Search..."
+    />
+    <div class="fil-date">
+      <label for="">From: &nbsp;</label>
+      <input
+        style="margin-right: 2rem; width: max-content"
+        type="date"
+        id="from-date"
+      />
+      <label for="">To: &nbsp;</label>
+      <input
+        style="margin-top: 1rem; width: max-content"
+        type="date"
+        id="to-date"
+      />
+    </div>
+  </div>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Full Name</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Joined On</th>
+        <th>Borrow</th>
+        <th>History</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.username }}</td>
+        <td style="width: 10%; word-break: break-all">{{ user.email }}</td>
+        <td class="join-on" data-date="{{ user.reg_on }}">
+          {{ user.reg_on.strftime('%d %b, %Y') }}
+          <br />
+          {{ user.reg_on.strftime('%I:%M %p') }}
+        </td>
+        <td>
+          <a href="borrow-books/{{ user.id }}">
+            <button id="myButton">Borrow</button></a
+          >
+        </td>
+        <td>
+          <a href="user-details/{{ user.id }}">
+            <button id="myButton">Details</button></a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  const fromDate = document.getElementById("from-date");
+  const toDate = document.getElementById("to-date");
+  const addDate = document.querySelectorAll(".join-on");
+  function filterDates() {
+    const fromValue = fromDate.value ? new Date(fromDate.value) : null;
+    const toValue = toDate.value ? new Date(toDate.value) : null;
+
+    if (fromValue && toValue && fromValue > toValue) {
+      alert("Please select a 'From' date that is earlier than the 'To' date.");
+      location.reload();
+    }
+
+    for (let i = 0; i < addDate.length; i++) {
+      // get the date value from the data-date attribute
+      const addDateValue = new Date(addDate[i].dataset.date);
+      let displayRow = true;
+
+      if (fromValue && addDateValue < fromValue) {
+        displayRow = false;
+      }
+
+      if (toValue && addDateValue > toValue) {
+        displayRow = false;
+      }
+
+      addDate[i].parentNode.style.display = displayRow ? "" : "none";
+    }
+  }
+  fromDate.addEventListener("change", filterDates);
+  toDate.addEventListener("change", filterDates);
+</script>
+<script src="{{ url_for('static', filename='js/sb.js') }}"></script>
+{% endblock %}
